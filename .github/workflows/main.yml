@@ -1,0 +1,11 @@
+
+name: Test automatique
+
+on: [push, workflow_dispatch]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verification
+        run: echo "Africa Video Agent fonctionne"
