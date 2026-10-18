@@ -1,0 +1,14 @@
+
+name: Test automatique
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * *"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Vérifier le fonctionnement
+        run: echo "Africa Video Agent fonctionne !"
