@@ -1,11 +1,46 @@
 
-name: Test automatique
+name: Africa Video Agent
 
-on: [push, workflow_dispatch]
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "agent.py"
+      - "video.py"
+      - "requirements.txt"
+      - ".github/workflows/production.yml"
+
+permissions:
+  contents: read
 
 jobs:
-  test:
+  generate-video:
     runs-on: ubuntu-latest
     steps:
-      - name: Verification
-        run: echo "Africa Video Agent fonctionne"
+      - name: Recuperer le projet
+        uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Installer FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Installer les bibliotheques
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Creer la video
+        run: python video.py
+
+      - name: Enregistrer le MP4
+        uses: actions/upload-artifact@v4
+        with:
+          name: premiere-video
+          path: videos/premiere_video.mp4
+          if-no-files-found: error
